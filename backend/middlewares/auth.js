@@ -9,6 +9,7 @@ module.exports = (req, res, next) =>{
         const userId = decodedToken.userId;
         // on rajoute l'objet userId à l'objet requete
         req.auth = {userId: userId};
+        next()
     }
     catch(error){
         res.status(401).json({error})

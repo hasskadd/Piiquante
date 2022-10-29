@@ -5,7 +5,7 @@ const fs = require('fs') // filesysteme , acceder aux fichier
 exports.getAllSauce = (req, res, next) =>{
     Sauce.find()
         .then(sauces => res.status(200).json(sauces))
-        .catch(error => res.status(400).json({ error }))
+        .catch(error => res.status(400).json({ error }))  
 }
 
 exports.createSauce = (req, res, next) =>{
@@ -13,6 +13,7 @@ exports.createSauce = (req, res, next) =>{
     // dans req.body.sauce le sauce correspont à la key de postman pour ajouter les infos en texte
         const sauceObjet = JSON.parse(req.body.sauce);
         delete sauceObjet._id;
+        const protocolGet = req.headers.referer.split(':')[0];
         //delete sauceObjet._userId;
         const setLikes = {
             likes: 0,
@@ -23,7 +24,7 @@ exports.createSauce = (req, res, next) =>{
         const sauce = new Sauce({
             ...sauceObjet,
             userId: req.auth.userId,
-            imageUrl: `${req.protocal}://${req.get('host')}/images/${req.file.filename}`,
+            imageUrl: `${protocolGet}://${req.get('host')}/images/${req.file.filename}`,
             ...setLikes  
         });
         sauce.save()
@@ -33,21 +34,22 @@ exports.createSauce = (req, res, next) =>{
 }
 
 exports.getOneSauce = (req, res, next) =>{
-    Sauce.findOne({_id: req.body.id})
-        .then(sauce => res.status(200).json(sauce))
+    Sauce.findOne({_id: req.params.id})
+        .then((sauce) => res.status(200).json(sauce))
         .catch(error => res.status(400).json({ error }))
 }
 
 
 
 exports.modifySauce = (req, res, next) =>{
+    const protocolGet = req.headers.referer.split(':')[0];
     const sauceObject = req.file ? {
         ...JSON.parse(req.body.sauce),
-        imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
+        imageUrl: `${protocolGet}://${req.get('host')}/images/${req.file.filename}`,
     } : { ...req.body };
   
     delete sauceObject._userId;
-    Thing.findOne({_id: req.params.id})
+    Sauce.findOne({_id: req.params.id})
         .then((sauce) => {
             if (sauce.userId != req.auth.userId) {
                 res.status(401).json({ message : 'Not authorized'});
@@ -57,14 +59,12 @@ exports.modifySauce = (req, res, next) =>{
                 .catch(error => res.status(401).json({ error }));
             }
         })
-        .catch((error) => {
-            res.status(400).json({ error });
-        });
+        .catch(error => res.status(400).json({ error }))
 }
 
 exports.deleteSauce = (req, res, next) =>{
     Sauce.findOne({ _id: req.params.id})
-    .then(sauce => {
+    .then((sauce) => {
         if (sauce.userId != req.auth.userId) {
             res.status(401).json({message: 'Not authorized'});
         } else {
@@ -76,12 +76,9 @@ exports.deleteSauce = (req, res, next) =>{
             });
         }
     })
-    .catch( error => {
-        res.status(500).json({ error });
-    });
-
+    .catch(error => res.status(500).json({ error }))
+    
 }
-/*
-exports.createLike = (req, res, next) =>{
-
+/*exports.createLike = (req, res, next) =>{
+ 
 }*/

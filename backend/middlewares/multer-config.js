@@ -1,28 +1,36 @@
-const multer = require('multer')
-
-// on définit les images/formats reçu en appartenance de format 
+const multer = require("multer");
+// on définit les images/formats 
 const MIME_TYPES = {
-    'images/jpg': 'jpg',
-    'images/jpeg': 'jpg',
-    'images/png': 'png',
-    "image/bmp": "bmp",
-    "image/gif": "gif",
-    "image/webp": "webp",
-    "image/x-icon": "ico",
-    "image/svg+xml": "svg"
-    
+  "image/jpg": "jpg",
+  "image/jpeg": "jpg",
+  "image/png": "png",
+  "image/svg+xml": "svg",
+  "image/webp": "webp",
+  "image/bmp": "bmp",
+  "image/gif": "gif"
 };
-// enregistrer sur le disque
+// multer.diskStorage on va enregistrer sur le disque
 const storage = multer.diskStorage({
-    destination: (req, file, callback)=>{
-        // null dans ce cas , pas d'erreur
-        callback(null, 'images')
-    },
-    filename: (req, file, callback) =>{
-        const name = file.originalname.split(' ').join('_');
-        const extension = MIME_TYPES[file.mimetype];
-        callback(null, name + Date.now() + '.' + extension)
-    }
+  // on choisit la destination
+  destination: (req, file, callback) => {
+    callback(null, "images");
+  },
+  filename: (req, file, callback) => {
+    // nom d'origine du fichier que l'ont transforme si il y a des espaces, on crée un tableau et on join ses éléments par _
+    const name = file.originalname.split(" ").join("_");
+    const extension = MIME_TYPES[file.mimetype];
+    if (
+      file.mimetype === "image/jpeg" ||
+      file.mimetype === "image/png" ||
+      file.mimetype === "image/jpg" ||
+      file.mimetype === "image/bmp" ||
+      file.mimetype === "image/gif" ||
+      file.mimetype === "image/svg" ||
+      file.mimetype === "image/webp"
+    ) {
+      callback(null, name + Date.now() + "." + extension);
+    } 
+  },
 });
 
-module.exports = multer({storage}).single('image');
+module.exports = multer({ storage }).single("image");
