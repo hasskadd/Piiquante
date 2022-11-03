@@ -2,6 +2,7 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const path = require('path')
+const helmet = require('helmet')
 
 
 const userRoutes = require('./routes/user')
@@ -14,7 +15,9 @@ mongoose.connect('mongodb+srv://hkd619:Thepirate1992@cluster0.9wrfomp.mongodb.ne
     .catch(() => console.log('Connexion à MongoDB échouée !')); 
  
     
+
 const app = express();
+
     
 
 app.use(function (req, res, next) {
@@ -25,6 +28,7 @@ app.use(function (req, res, next) {
   next();
 });
 
+app.use(helmet());
 app.use(bodyParser.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', userRoutes);
