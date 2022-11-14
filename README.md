@@ -8,7 +8,7 @@ git clone git@github.com:hasskadd/Piiquante.git
 cd Piiquante
 ```
 
-## Lancer  le fron
+## Lancer  le front
 
 ```bash
 cd frontend
