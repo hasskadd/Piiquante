@@ -3,12 +3,13 @@ const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const path = require('path')
 const helmet = require('helmet')
+require('dotenv').config()
 
 
 const userRoutes = require('./routes/user')
 const sauceRoutes = require('./routes/sauce')
 
-mongoose.connect('mongodb+srv://hkd619:Thepirate1992@cluster0.9wrfomp.mongodb.net/?retryWrites=true&w=majority',
+mongoose.connect(process.env.BD_KEY,
     { useNewUrlParser: true,
       useUnifiedTopology: true })
     .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -28,7 +29,7 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
 app.use(bodyParser.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/auth', userRoutes);
