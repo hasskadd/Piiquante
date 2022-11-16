@@ -1,4 +1,5 @@
-const jwt = require('jsonwebtoken') 
+const jwt = require('jsonwebtoken')
+require('dotenv').config() 
 module.exports = (req, res, next) =>{
     try{
         // on utilise le header authorization de la requete (CORS) on split le tableau et on récupère l'élément à l'indice 1 (Bearer Token)

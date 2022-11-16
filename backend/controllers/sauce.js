@@ -125,8 +125,8 @@ exports.createLike = (req, res, next) =>{
                     break;
             };
             // Calcul du nombre de likes / dislikes
-            setValueLike.like = setValueLike.usersLiked.length;
-            setValueLike.dislike = setValueLike.usersDisliked.length;
+            setValueLike.likes = setValueLike.usersLiked.length;
+            setValueLike.dislikes = setValueLike.usersDisliked.length;
             // Mise à jour de la sauce avec les nouvelles valeurs
             Sauce.updateOne({ _id: req.params.id }, setValueLike )
                 .then(() => res.status(200).json({ message: 'nouvelle note !' }))

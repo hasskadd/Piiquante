@@ -14,17 +14,18 @@ cd Piiquante
 cd frontend
 ```
 ```bash
+npm install
+```
+```bash
 npm start
 ```
 
 ## Rendez vous dans le dossier backend
-Créer un fichier .env 
 
-Editez le fichier .env
-```bash
-BD_KEY = 'mongodb+srv://hkd619:Thepirate1992@cluster0.9wrfomp.mongodb.net/?retryWrites=true&w=majority'
-```
 Puis lancer le serveur
+```bash
+npm install
+```
 
 ```bash
 npm start
